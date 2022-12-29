@@ -2,3 +2,5 @@ node_modules
 dist
 server
 config
+remotes
+public/remotes

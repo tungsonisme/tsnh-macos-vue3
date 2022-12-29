@@ -1,5 +1,10 @@
-import { createApp } from 'vue';
+import { createApp, defineAsyncComponent } from 'vue';
 import './style.css';
 import App from './App.vue';
 
-createApp(App).mount('#app');
+const app = createApp(App);
+
+const PokemonApp = defineAsyncComponent(() => import('pokemon/App'));
+app.component('PokemonApp', PokemonApp);
+
+app.mount('#macos-app');
