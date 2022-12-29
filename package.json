@@ -1,22 +1,26 @@
 {
   "name": "tsnh-macos-vue3",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
+  "engines": {
+    "npm": ">=8.0.0",
+    "node": ">=16.0.0"
+  },
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc && vite build",
-    "preview": "vite preview",
+    "build": "pnpm install && vue-tsc && vite build",
+    "preview": "PREVIEW=true pnpm run build && vite preview --mode=preview",
     "prepare": "husky install",
     "eslint": "./node_modules/.bin/eslint '**/*.{ts,vue}'",
     "stylelint": "./node_modules/.bin/stylelint '**/*.{scss,vue}'"
   },
   "lint-staged": {
     "*.{ts,tsx,vue}": [
-      "yarn eslint --quiet --cache --fix"
+      "npx eslint --quiet --cache --fix"
     ],
     "*.{css,scss,vue}": [
-      "yarn stylelint --fix"
+      "npx stylelint --fix"
     ]
   },
   "dependencies": {
@@ -24,7 +28,7 @@
   },
   "devDependencies": {
     "@originjs/vite-plugin-federation": "^1.1.12",
-    "@types/node": "^18.11.18",
+    "@types/node": "^16.18.11",
     "@typescript-eslint/eslint-plugin": "^5.45.0",
     "@typescript-eslint/parser": "^5.45.0",
     "@vitejs/plugin-vue": "^4.0.0",

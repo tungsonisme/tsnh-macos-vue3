@@ -1,0 +1,9 @@
+{
+  "productionHost": "https://tungson.netlify.app",
+  "remotes": [
+    {
+      "name": "pokemon",
+      "git": "https://github.com/tungsonisme/tsnh-pokemon-vue3"
+    }
+  ]
+}
