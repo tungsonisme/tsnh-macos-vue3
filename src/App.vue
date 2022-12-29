@@ -5,4 +5,5 @@ import HelloWorld from './components/HelloWorld.vue';
 <template>
   <HelloWorld msg="New Host App" />
   <PokemonApp />
+  <PokemonSetting />
 </template>

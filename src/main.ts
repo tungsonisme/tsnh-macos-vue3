@@ -1,12 +1,11 @@
-import { createApp, defineAsyncComponent } from 'vue';
+import { createApp } from 'vue';
 import './style.css';
 import App from './App.vue';
+import { loadRemotes } from './helpers/remotes';
 
 const app = createApp(App);
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-const PokemonApp = defineAsyncComponent(() => import('pokemon/App'));
-app.component('PokemonApp', PokemonApp);
+// DO NOT REMOVE
+loadRemotes();
 
 app.mount('#macos-app');

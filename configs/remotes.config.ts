@@ -35,13 +35,14 @@ const initializeRemotes = async ({
   mode: string;
   port: number;
   previewMode: boolean;
-}): Promise<Record<string, string>> => {
+}) => {
   cleanFolders();
 
   // cd into remotes dir
   shell.cd(REMOTES_DIR);
 
   const remotes: Record<string, string> = {};
+  const viteRegisteredApps: { app: string; component: string }[] = [];
 
   // read config files
   log(`reading config ${CONFIG_FILE} ...`);
@@ -56,6 +57,7 @@ const initializeRemotes = async ({
 
     const appFolderName = git.split('/')[git.split('/').length - 1];
 
+    // update remotes
     let remotePrefix: string;
     if (mode === 'development' || previewMode) {
       remotePrefix = `http://localhost:${port}`;
@@ -66,26 +68,43 @@ const initializeRemotes = async ({
 
     if (fs.existsSync(appFolderName)) {
       log(`[${name}] pulling the latest code ...`);
+
       // cd into project
       shell.cd(appFolderName);
+
       // pull the latest code
       shell.exec('git pull', { silent: true });
     } else {
       log(`[${name}] cloning the latest code ...`);
+
       // clone project
       shell.exec(`git clone ${git}`, { silent: true });
+
       // cd into project
       shell.cd(appFolderName);
     }
 
     // install dependencies
     shell.exec('pnpm install', { silent: true });
+
     // build project
     shell.exec('pnpm run build', { silent: true });
+
     // copy built bundles into public/remotes
     fs.cpSync(`dist/assets`, `../../${PUBLIC_REMOTES_DIR}/${name}`, {
       recursive: true,
     });
+
+    // set viteRegisteredApps
+    const files = fs.readdirSync('src/exposes');
+    files.forEach((fileName) => {
+      const component = fileName.split('.vue')[0];
+      viteRegisteredApps.push({
+        app: name,
+        component,
+      });
+    });
+
     // cd out to process next project
     shell.cd('..');
   });
@@ -100,7 +119,7 @@ const initializeRemotes = async ({
   console.log('');
   shell.cd('..');
 
-  return remotes;
+  return { remotes, viteRegisteredApps };
 };
 
 export default initializeRemotes;
