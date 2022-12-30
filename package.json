@@ -9,7 +9,8 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "pnpm install && vue-tsc && vite build",
+    "dev:local": "LOCAL=true vite",
+    "build": "vue-tsc && vite build",
     "preview": "PREVIEW=true pnpm run build && vite preview --mode=preview",
     "prepare": "husky install",
     "eslint": "./node_modules/.bin/eslint '**/*.{ts,vue}'",

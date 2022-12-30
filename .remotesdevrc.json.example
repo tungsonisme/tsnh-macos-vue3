@@ -1,0 +1,10 @@
+{
+  "remotes": [
+    {
+      // application name in .remotesrc.json
+      "name": "pokemon", 
+      // port where local application is running one
+      "port": 4173
+    }
+  ]
+}

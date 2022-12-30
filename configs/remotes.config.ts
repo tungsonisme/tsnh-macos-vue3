@@ -4,7 +4,8 @@ import shell from 'shelljs';
 const REMOTES_DIR = './remotes';
 const PUBLIC_REMOTES_DIR = 'public/remotes';
 const BUILD_DIR = 'dist';
-const CONFIG_FILE = '../.remotesrc.json';
+const REMOTES_CONFIG_FILE = '../.remotesrc.json';
+const REMOTES_DEV_CONFIG_FILE = '../.remotesdevrc.json';
 
 const log = (mess: string) => console.log(`[remotes] ${mess}`);
 
@@ -31,10 +32,12 @@ const initializeRemotes = async ({
   mode,
   port,
   previewMode,
+  localMode,
 }: {
   mode: string;
   port: number;
   previewMode: boolean;
+  localMode: boolean;
 }) => {
   cleanFolders();
 
@@ -45,19 +48,21 @@ const initializeRemotes = async ({
   const viteRegisteredApps: { app: string; component: string }[] = [];
 
   // read config files
-  log(`reading config ${CONFIG_FILE} ...`);
-  const rawData = fs.readFileSync(CONFIG_FILE);
+  log(`reading config ${REMOTES_CONFIG_FILE} ...`);
+  const remotesConfigRawData = fs.readFileSync(REMOTES_CONFIG_FILE);
   const { remotes: remoteConfigs, productionHost } = JSON.parse(
-    rawData.toString()
+    remotesConfigRawData.toString()
+  );
+  const remotesDevConfigRawData = fs.readFileSync(REMOTES_DEV_CONFIG_FILE);
+  const { remotes: remoteDevConfigs } = JSON.parse(
+    remotesDevConfigRawData.toString()
   );
 
   // generate remotes config for federation plugin
   remoteConfigs.forEach(({ name, git }) => {
-    log(`setting up "${name}" from "${git}" ...`);
-
     const appFolderName = git.split('/')[git.split('/').length - 1];
 
-    // update remotes
+    // update remotes from Github
     let remotePrefix: string;
     if (mode === 'development' || previewMode) {
       remotePrefix = `http://localhost:${port}`;
@@ -67,16 +72,12 @@ const initializeRemotes = async ({
     remotes[name] = `${remotePrefix}/remotes/${name}/remoteEntry.js`;
 
     if (fs.existsSync(appFolderName)) {
-      log(`[${name}] pulling the latest code ...`);
-
       // cd into project
       shell.cd(appFolderName);
 
       // pull the latest code
       shell.exec('git pull', { silent: true });
     } else {
-      log(`[${name}] cloning the latest code ...`);
-
       // clone project
       shell.exec(`git clone ${git}`, { silent: true });
 
@@ -84,16 +85,33 @@ const initializeRemotes = async ({
       shell.cd(appFolderName);
     }
 
-    // install dependencies
-    shell.exec('pnpm install', { silent: true });
+    // update remotes from local
+    const devConfig = remoteDevConfigs.find((config) => config.name === name);
+    if (
+      localMode &&
+      devConfig &&
+      devConfig.port &&
+      Number.isInteger(devConfig.port)
+    ) {
+      log(`setting up "${name}" from localhost:${devConfig.port} ...`);
 
-    // build project
-    shell.exec('pnpm run build', { silent: true });
+      remotes[
+        name
+      ] = `http://localhost:${devConfig.port}/assets/remoteEntry.js`;
+    } else {
+      log(`setting up "${name}" from "${git}" ...`);
 
-    // copy built bundles into public/remotes
-    fs.cpSync(`dist/assets`, `../../${PUBLIC_REMOTES_DIR}/${name}`, {
-      recursive: true,
-    });
+      // install dependencies
+      shell.exec('pnpm install', { silent: true });
+
+      // build project
+      shell.exec('pnpm run build', { silent: true });
+
+      // copy built bundles into public/remotes
+      fs.cpSync(`dist/assets`, `../../${PUBLIC_REMOTES_DIR}/${name}`, {
+        recursive: true,
+      });
+    }
 
     // set viteRegisteredApps
     const files = fs.readdirSync('src/exposes');

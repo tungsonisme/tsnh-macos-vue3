@@ -8,6 +8,11 @@ const PORT = 3000;
 
 // https://vitejs.dev/config/
 export default defineConfig(async ({ mode }) => {
+  const previewMode = process.env.PREVIEW === 'true' && mode === 'production';
+  const localMode = process.env.LOCAL === 'true' && mode === 'development';
+
+  console.log({ localMode }, process.env.LOCAL);
+
   const viteConfig: UserConfigExport = {
     server: {
       port: PORT,
@@ -22,7 +27,8 @@ export default defineConfig(async ({ mode }) => {
     const { remotes, viteRegisteredApps } = await initializeRemotes({
       mode,
       port: PORT,
-      previewMode: process.env.PREVIEW === 'true' && mode === 'production',
+      previewMode,
+      localMode,
     });
 
     viteConfig.plugins.push(remotesPlugin(viteRegisteredApps));
