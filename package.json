@@ -1,5 +1,5 @@
 {
-  "name": "tsnh-macos-vue3",
+  "name": "@tsnh/macos",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -10,6 +10,7 @@
   "scripts": {
     "dev": "vite",
     "dev:local": "LOCAL=true vite",
+    "dev:prod": "nodemon --watch './src/*' -x \"pnpm preview\" -e ts,vue",
     "build": "vue-tsc && vite build",
     "preview": "PREVIEW=true pnpm run build && vite preview --mode=preview",
     "prepare": "husky install",
@@ -25,11 +26,14 @@
     ]
   },
   "dependencies": {
+    "pinia": "^2.0.28",
+    "tsnh-macos-kernel": "^1.1.0",
     "vue": "^3.2.45"
   },
   "devDependencies": {
     "@originjs/vite-plugin-federation": "^1.1.12",
     "@types/node": "^16.18.11",
+    "@types/shelljs": "^0.8.11",
     "@typescript-eslint/eslint-plugin": "^5.45.0",
     "@typescript-eslint/parser": "^5.45.0",
     "@vitejs/plugin-vue": "^4.0.0",
@@ -40,6 +44,7 @@
     "eslint-plugin-vue": "^9.8.0",
     "husky": "^8.0.0",
     "lint-staged": "^13.1.0",
+    "nodemon": "^2.0.20",
     "postcss": "^8.4.20",
     "postcss-html": "^1.5.0",
     "prettier": "^2.8.0",

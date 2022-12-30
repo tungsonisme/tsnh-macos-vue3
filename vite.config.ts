@@ -11,11 +11,16 @@ export default defineConfig(async ({ mode }) => {
   const previewMode = process.env.PREVIEW === 'true' && mode === 'production';
   const localMode = process.env.LOCAL === 'true' && mode === 'development';
 
-  console.log({ localMode }, process.env.LOCAL);
-
   const viteConfig: UserConfigExport = {
     server: {
       port: PORT,
+      proxy: {
+        '/node_modules/.vite/tsnh-macos-kernel.js': {
+          target: `http://localhost:${PORT}`,
+          changeOrigin: true,
+          rewrite: () => `/node_modules/tsnh-macos-kernel/dist/macos-kernel.js`,
+        },
+      },
     },
     preview: {
       port: PORT,
@@ -37,7 +42,7 @@ export default defineConfig(async ({ mode }) => {
       federation({
         name: 'host-app',
         remotes,
-        shared: ['vue'],
+        shared: ['vue', 'tsnh-macos-kernel', 'pinia'],
       })
     );
   }

@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import shell from 'shelljs';
 
-const REMOTES_DIR = './remotes';
+const REMOTES_DIR = './.remotes';
 const PUBLIC_REMOTES_DIR = 'public/remotes';
 const BUILD_DIR = 'dist';
 const REMOTES_CONFIG_FILE = '../.remotesrc.json';
@@ -71,12 +71,17 @@ const initializeRemotes = async ({
     }
     remotes[name] = `${remotePrefix}/remotes/${name}/remoteEntry.js`;
 
+    let needToInstallAndBuild = true;
     if (fs.existsSync(appFolderName)) {
       // cd into project
       shell.cd(appFolderName);
 
       // pull the latest code
-      shell.exec('git pull', { silent: true });
+      const gitPullResult = shell.exec('git pull', { silent: true });
+
+      if (gitPullResult.stdout.includes('Already up to date')) {
+        needToInstallAndBuild = false;
+      }
     } else {
       // clone project
       shell.exec(`git clone ${git}`, { silent: true });
@@ -101,11 +106,13 @@ const initializeRemotes = async ({
     } else {
       log(`setting up "${name}" from "${git}" ...`);
 
-      // install dependencies
-      shell.exec('pnpm install', { silent: true });
+      if (needToInstallAndBuild) {
+        // install dependencies
+        shell.exec('pnpm install', { silent: true });
 
-      // build project
-      shell.exec('pnpm run build', { silent: true });
+        // build project
+        shell.exec('pnpm run build', { silent: true });
+      }
 
       // copy built bundles into public/remotes
       fs.cpSync(`dist/assets`, `../../${PUBLIC_REMOTES_DIR}/${name}`, {
