@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue';
-import { MacosWindow } from 'tsnh-macos-kernel';
+import MenuBar from './components/MenuBar/index.vue';
+import Dock from './components/Dock/index.vue';
+import LaunchedApps from './components/LaunchedApps/index.vue';
 </script>
 
 <template>
-  <HelloWorld msg="New Host App v3" />
-  <MacosWindow msg="Host App Macos Window" />
-  <PokemonApp />
-  <PokemonSetting />
+  <div class="app">
+    <MenuBar />
+    <LaunchedApps />
+    <Dock />
+  </div>
 </template>

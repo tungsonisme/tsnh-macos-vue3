@@ -3,6 +3,9 @@
   "remotes": [
     {
       "name": "pokemon",
+      "title": "Pokemon",
+      "icon": "",
+      "mainComponent": "PokemonApp",
       "git": "https://github.com/tungsonisme/tsnh-pokemon-vue3"
     }
   ]

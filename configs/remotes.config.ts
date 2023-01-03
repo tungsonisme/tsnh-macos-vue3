@@ -144,6 +144,9 @@ const initializeRemotes = async ({
   console.log('');
   shell.cd('..');
 
+  // inject apps
+  process.env.VITE_APPS = JSON.stringify(remoteConfigs);
+
   return { remotes, viteRegisteredApps };
 };
 

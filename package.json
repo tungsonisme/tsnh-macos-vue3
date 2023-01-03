@@ -8,7 +8,7 @@
     "node": ">=16.0.0"
   },
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --config vite.config.ts",
     "dev:local": "LOCAL=true vite",
     "dev:prod": "nodemon --watch './src/*' -x \"pnpm preview\" -e ts,vue",
     "build": "vue-tsc && vite build",
@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "pinia": "^2.0.28",
-    "tsnh-macos-kernel": "^1.1.0",
+    "tsnh-macos-kernel": "^1.3.0",
     "vue": "^3.2.45"
   },
   "devDependencies": {
@@ -48,6 +48,7 @@
     "postcss": "^8.4.20",
     "postcss-html": "^1.5.0",
     "prettier": "^2.8.0",
+    "sass": "^1.57.1",
     "shelljs": "^0.8.5",
     "stylelint": "^14.16.0",
     "stylelint-config-prettier": "^9.0.4",
