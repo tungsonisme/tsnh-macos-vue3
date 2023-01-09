@@ -18,7 +18,6 @@ const { apps, open } = useAppStore();
 
 <style lang="scss" scoped>
 .dock {
-  background-color: rgba($color: white, $alpha: 0.6);
   color: white;
   position: fixed;
   bottom: 4px;
@@ -26,11 +25,13 @@ const { apps, open } = useAppStore();
   transform: translate(-50%, 0);
   width: 500px;
   height: $dock-height;
-  border-radius: 12px;
-  padding: 8px 6px;
+  padding: 6px 8px;
   z-index: $tool-bar-z-index;
   display: flex;
   align-items: center;
+  background: rgba(244, 245, 245, 0.6);
+  border: 0.5px solid #f4f5f5;
+  border-radius: 16px;
 
   .app-icon {
     width: $dock-height;
