@@ -8,7 +8,7 @@
     "node": ">=16.0.0"
   },
   "scripts": {
-    "dev": "vite --config vite.config.ts",
+    "dev": "vite",
     "dev:local": "LOCAL=true vite",
     "dev:prod": "nodemon --watch './src/*' -x \"pnpm preview\" -e ts,vue",
     "build": "vue-tsc && vite build",
@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "pinia": "^2.0.28",
-    "tsnh-macos-kernel": "^1.3.0",
+    "tsnh-macos-kernel": "^1.3.2",
     "vue": "^3.2.45"
   },
   "devDependencies": {

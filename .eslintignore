@@ -3,4 +3,4 @@ dist
 server
 config
 remotes
-public/remotes
+public/.remotes

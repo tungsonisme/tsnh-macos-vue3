@@ -26,6 +26,17 @@ export default defineConfig(async ({ mode }) => {
       port: PORT,
     },
     plugins: [vue()],
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: `
+            @import 'src/styles/color.scss';
+            @import 'src/styles/layout.scss';
+            @import 'src/styles/zIndex.scss';
+          `,
+        },
+      },
+    },
   };
 
   if (mode !== 'preview') {

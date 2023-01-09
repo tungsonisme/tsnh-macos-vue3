@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import shell from 'shelljs';
 
 const REMOTES_DIR = './.remotes';
-const PUBLIC_REMOTES_DIR = 'public/remotes';
+const PUBLIC_REMOTES_DIR = 'public/.remotes';
 const BUILD_DIR = 'dist';
 const REMOTES_CONFIG_FILE = '../.remotesrc.json';
 const REMOTES_DEV_CONFIG_FILE = '../.remotesdevrc.json';
@@ -69,7 +69,7 @@ const initializeRemotes = async ({
     } else if (mode === 'production') {
       remotePrefix = productionHost;
     }
-    remotes[name] = `${remotePrefix}/remotes/${name}/remoteEntry.js`;
+    remotes[name] = `${remotePrefix}/.remotes/${name}/remoteEntry.js`;
 
     let needToInstallAndBuild = true;
     if (fs.existsSync(appFolderName)) {
@@ -114,7 +114,7 @@ const initializeRemotes = async ({
         shell.exec('pnpm run build', { silent: true });
       }
 
-      // copy built bundles into public/remotes
+      // copy built bundles into public/.remotes
       fs.cpSync(`dist/assets`, `../../${PUBLIC_REMOTES_DIR}/${name}`, {
         recursive: true,
       });

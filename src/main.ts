@@ -4,6 +4,7 @@ import './style.css';
 import App from './App.vue';
 import { loadRemotes } from './helpers/remotes';
 
+// Create app
 const app = createApp(App);
 
 // Setup Macos Kernel
@@ -14,4 +15,5 @@ installApps(JSON.parse(import.meta.env.VITE_APPS));
 // DO NOT REMOVE
 loadRemotes();
 
+// Mount app
 app.mount('#macos-app');

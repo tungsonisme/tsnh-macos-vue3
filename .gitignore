@@ -24,6 +24,6 @@ dist-ssr
 *.sw?
 
 # remotes
-remotes
-public/remotes
+.remotes
+public/.remotes
 .remotesdevrc.json

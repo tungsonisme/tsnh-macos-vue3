@@ -5,7 +5,12 @@ const { apps, open } = useAppStore();
 
 <template>
   <div class="dock">
-    <div v-for="app in apps" :key="app.name" @click="() => open(app.name)">
+    <div
+      v-for="app in apps"
+      :key="app.name"
+      class="app-icon"
+      @click="() => open(app.name)"
+    >
       {{ app.name }}
     </div>
   </div>
@@ -13,11 +18,25 @@ const { apps, open } = useAppStore();
 
 <style lang="scss" scoped>
 .dock {
-  background-color: #242424;
+  background-color: rgba($color: white, $alpha: 0.6);
   color: white;
   position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100vw;
+  bottom: 4px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  width: 500px;
+  height: $dock-height;
+  border-radius: 12px;
+  padding: 8px 6px;
+  z-index: $tool-bar-z-index;
+  display: flex;
+  align-items: center;
+
+  .app-icon {
+    width: $dock-height;
+    height: $dock-height;
+    border-radius: 10px;
+    background-color: black;
+  }
 }
 </style>
