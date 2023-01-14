@@ -53,10 +53,13 @@ const initializeRemoteRepos = async ({
   const { remotes: remoteConfigs, productionHost } = JSON.parse(
     remotesConfigRawData.toString()
   );
-  const remotesDevConfigRawData = fs.readFileSync(REMOTES_DEV_CONFIG_FILE);
-  const { remotes: remoteDevConfigs } = JSON.parse(
-    remotesDevConfigRawData.toString()
-  );
+
+  let remoteDevConfigs;
+  if (mode !== 'production') {
+    const remotesDevConfigRawData = fs.readFileSync(REMOTES_DEV_CONFIG_FILE);
+    const { remotes } = JSON.parse(remotesDevConfigRawData.toString());
+    remoteDevConfigs = remotes;
+  }
 
   // generate remotes config for federation plugin
   remoteConfigs.forEach(({ name, git }) => {
@@ -91,7 +94,7 @@ const initializeRemoteRepos = async ({
     }
 
     // update remotes from local
-    const devConfig = remoteDevConfigs.find((config) => config.name === name);
+    const devConfig = remoteDevConfigs?.find((config) => config.name === name);
     if (
       localMode &&
       devConfig &&
