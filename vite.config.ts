@@ -1,8 +1,9 @@
 import { defineConfig, UserConfigExport } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import federation from '@originjs/vite-plugin-federation';
-import initializeRemotes from './configs/remotes.config';
-import remotesPlugin from './configs/remotes.plugin';
+import initializeRemoteRepos from './build/initializeRemoteRepos';
+import defineRemoteComponents from './build/defineRemoteComponents';
+import injectAppInfos from './build/injectAppInfos';
 
 const PORT = 3000;
 
@@ -40,14 +41,14 @@ export default defineConfig(async ({ mode }) => {
   };
 
   if (mode !== 'preview') {
-    const { remotes, viteRegisteredApps } = await initializeRemotes({
+    const { remotes, viteRegisteredApps } = await initializeRemoteRepos({
       mode,
       port: PORT,
       previewMode,
       localMode,
     });
 
-    viteConfig.plugins.push(remotesPlugin(viteRegisteredApps));
+    viteConfig.plugins.push(defineRemoteComponents(viteRegisteredApps));
 
     viteConfig.plugins.push(
       federation({
@@ -57,6 +58,8 @@ export default defineConfig(async ({ mode }) => {
       })
     );
   }
+
+  injectAppInfos();
 
   return viteConfig;
 });

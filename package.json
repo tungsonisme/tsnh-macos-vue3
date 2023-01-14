@@ -11,6 +11,8 @@
     "dev": "vite",
     "dev:local": "LOCAL=true vite",
     "dev:prod": "nodemon --watch './src/*' -x \"pnpm preview\" -e ts,vue",
+    "dev:link": "pnpm link tsnh-macos-kernel --global",
+    "dev:unlink": "pnpm link tsnh-macos-kernel",
     "build": "vue-tsc && vite build",
     "preview": "PREVIEW=true pnpm run build && vite preview --mode=preview",
     "prepare": "husky install",
@@ -27,7 +29,7 @@
   },
   "dependencies": {
     "pinia": "^2.0.28",
-    "tsnh-macos-kernel": "^1.3.2",
+    "tsnh-macos-kernel": "^1.3.4",
     "vue": "^3.2.45"
   },
   "devDependencies": {

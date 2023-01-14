@@ -1,74 +1,56 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref, watch } from 'vue';
-import {
-  useAppStore,
-  MenuBarItem as MenuBarItemConfig,
-} from 'tsnh-macos-kernel';
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
+import { storeToRefs } from 'pinia';
+import { useAppStore } from 'tsnh-macos-kernel';
 import MenuBarItem from './MenuBarItem.vue';
-import appleIcon from '../../assets/icons/apple.svg';
+import { ExtendedMenuBarItemConfig } from '../../types/menuBar';
+import { getAppIconMenuBarItemConfig } from './helpers';
 
 const activeTitle = ref<string>();
 const menuBarRef = ref<HTMLDivElement>();
 
-const { activeAppInfo } = useAppStore();
+const store = useAppStore();
+const { activeAppInfo } = storeToRefs(store);
+
 watch(activeAppInfo, () => {
-  activeTitle.value = '';
+  activeTitle.value = undefined;
 });
 
-const menuBarItemConfigs: MenuBarItemConfig[] = activeAppInfo.app
-  ? [
-      {
-        title: activeAppInfo.app.name,
-        dropdownItems: activeAppInfo.app.mainDropdownItems ?? [],
-      },
-      ...(activeAppInfo.app.menuBarItems ?? []),
-    ]
-  : [
-      {
-        title: 'Apple Icon',
-        icon: appleIcon,
-        dropdownItems: [
-          [
-            {
-              title: 'About this Mac',
-              onClick: () => {
-                console.log('About this Mac');
-              },
-            },
-          ],
-          [
-            {
-              title: 'Restart',
-              onClick: () => {
-                console.log('Restart');
-              },
-            },
-            {
-              title: 'Sleep',
-              onClick: () => {
-                console.log('Sleep');
-              },
-            },
-          ],
-        ],
-      },
-    ];
+const menuBarItemConfigs = computed((): ExtendedMenuBarItemConfig[] => {
+  return [
+    getAppIconMenuBarItemConfig(),
+    ...(activeAppInfo.value.app && !activeAppInfo.value.app.hiddenInDock
+      ? [
+          {
+            title: activeAppInfo.value.app.title,
+            dropdownItems: activeAppInfo.value.app.mainDropdownItems ?? [],
+            isAppName: true,
+          } as ExtendedMenuBarItemConfig,
+          ...(activeAppInfo.value.app.menuBarItems ?? []),
+        ]
+      : []),
+  ];
+});
 
-const handleMenuBarItemClick = (title: string) => {
+function handleMenuBarItemClick(title: string) {
   activeTitle.value = title;
-};
+}
 
-const handleMenuBarItemMouseOver = (title: string) => {
+function handleMenuBarItemMouseOver(title: string) {
   if (activeTitle.value) {
     activeTitle.value = title;
   }
-};
+}
 
-const handleDocumentClick = (e: Event) => {
+function handleDocumentClick(e: Event) {
   if (!menuBarRef.value?.contains(e.target as HTMLElement)) {
     activeTitle.value = undefined;
   }
-};
+}
+
+function handleDropdownClick() {
+  activeTitle.value = undefined;
+}
 
 onMounted(() => {
   document.addEventListener('click', handleDocumentClick);
@@ -77,6 +59,12 @@ onMounted(() => {
 onUnmounted(() => {
   document.removeEventListener('click', handleDocumentClick);
 });
+
+// TODO: show focus app
+// TODO: show time
+// TODO: show battery
+// TODO: show brightness slider
+// TODO: show menu when clicking time
 </script>
 
 <template>
@@ -88,6 +76,7 @@ onUnmounted(() => {
       :item-config="itemConfig"
       @click="handleMenuBarItemClick"
       @mouseover="handleMenuBarItemMouseOver"
+      @dropdown-click="handleDropdownClick"
     />
   </div>
 </template>

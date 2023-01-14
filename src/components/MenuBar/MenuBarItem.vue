@@ -1,21 +1,29 @@
 <script setup lang="ts">
-import { MenuBarItem as MenuBarItemConfig } from 'tsnh-macos-kernel';
+import { MenuBarDropdownItem } from 'tsnh-macos-kernel';
 import { computed } from 'vue';
+import { ExtendedMenuBarItemConfig } from '../../types/menuBar';
 
 const props = defineProps<{
   activeTitle?: string;
-  itemConfig: MenuBarItemConfig;
+  itemConfig: ExtendedMenuBarItemConfig;
 }>();
 
 const emit = defineEmits<{
   (e: 'click', title: string): void;
   (e: 'mouseover', title: string): void;
+  (e: 'dropdownClick'): void;
 }>();
 
 const isActive = computed(() => props.activeTitle === props.itemConfig.title);
+
 const isShowDropdown = computed(
   () => isActive.value && props.itemConfig.dropdownItems?.length
 );
+
+function handleDropdownClick(item: MenuBarDropdownItem) {
+  item.onClick?.();
+  emit('dropdownClick');
+}
 </script>
 
 <template>
@@ -28,7 +36,11 @@ const isShowDropdown = computed(
     <div v-if="props.itemConfig.icon" class="img-wrapper">
       <img :src="props.itemConfig.icon" />
     </div>
-    <div v-else class="text-wrapper">
+    <div
+      v-else
+      class="text-wrapper"
+      :class="{ 'app-name': props.itemConfig.isAppName }"
+    >
       {{ props.itemConfig.title }}
     </div>
 
@@ -42,7 +54,7 @@ const isShowDropdown = computed(
           v-for="item in section"
           :key="item.title"
           class="dropdown-item"
-          @click="item.onClick"
+          @click="() => handleDropdownClick(item)"
         >
           {{ item.title }}
         </div>
@@ -79,6 +91,12 @@ const isShowDropdown = computed(
 .text-wrapper {
   font-weight: 500;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  line-height: $menu-height;
+  color: rgba(255, 255, 255, 0.9);
+
+  &.app-name {
+    font-weight: bold;
+  }
 }
 
 .dropdown {

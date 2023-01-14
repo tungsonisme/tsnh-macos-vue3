@@ -28,7 +28,7 @@ function cleanFolders() {
   }
 }
 
-const initializeRemotes = async ({
+const initializeRemoteRepos = async ({
   mode,
   port,
   previewMode,
@@ -145,9 +145,9 @@ const initializeRemotes = async ({
   shell.cd('..');
 
   // inject apps
-  process.env.VITE_APPS = JSON.stringify(remoteConfigs);
+  process.env.VITE_MACOS_REMOTE_APPS = JSON.stringify(remoteConfigs);
 
   return { remotes, viteRegisteredApps };
 };
 
-export default initializeRemotes;
+export default initializeRemoteRepos;

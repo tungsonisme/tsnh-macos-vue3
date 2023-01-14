@@ -2,7 +2,7 @@ const capitalizeFirstLetter = (str: string) => {
   return `${str[0].toUpperCase()}${str.substring(1, str.length)}`;
 };
 
-const remotesPlugin = (
+const defineRemoteComponents = (
   viteRegisteredApps: { app: string; component: string }[]
 ) => {
   return {
@@ -13,7 +13,7 @@ const remotesPlugin = (
           import { defineAsyncComponent } from 'vue';
           
           ${src.replace(
-            'loadRemotes();',
+            'loadRemoteApps();',
             viteRegisteredApps
               .map(({ app, component }) => {
                 const componentName = `${capitalizeFirstLetter(
@@ -43,4 +43,4 @@ const remotesPlugin = (
   };
 };
 
-export default remotesPlugin;
+export default defineRemoteComponents;

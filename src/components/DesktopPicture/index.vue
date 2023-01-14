@@ -1,5 +1,11 @@
+<script lang="ts" setup>
+import { useAppStore } from 'tsnh-macos-kernel';
+
+const { focus } = useAppStore();
+</script>
+
 <template>
-  <div class="desktop-picture" />
+  <div class="desktop-picture" @click="() => focus(undefined)" />
 </template>
 
 <style lang="scss" scoped>
