@@ -27,3 +27,4 @@ dist-ssr
 .remotes
 public/.remotes
 .remotesdevrc.json
+asset-manifest.json

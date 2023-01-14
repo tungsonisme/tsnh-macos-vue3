@@ -2,7 +2,9 @@ import { ref } from 'vue';
 import { defineStore } from 'pinia';
 
 const useGlobalStore = defineStore('global', () => {
-  const appState = ref<'active' | 'sleep' | 'locked' | 'screenSaver'>('active');
+  const appState = ref<'boot' | 'locked' | 'active' | 'sleep' | 'screenSaver'>(
+    'boot'
+  );
 
   function login() {
     appState.value = 'active';

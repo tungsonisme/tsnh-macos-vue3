@@ -1,4 +1,5 @@
 import { App } from 'tsnh-macos-kernel';
+import SystemPreferencesIcon from '../assets/icons/systemPreferences.svg';
 
 export enum EnumLocalApp {
   ABOUT_THIS_MAC = 'about-this-mac',
@@ -22,7 +23,7 @@ const localApps: App[] = [
   {
     name: EnumLocalApp.SYSTEM_PREFERENCE,
     title: 'System Preferences',
-    icon: '',
+    icon: SystemPreferencesIcon,
     mainComponent: 'SystemPreferences',
     defaultStyles: {
       isHorizontallyCenter: true,

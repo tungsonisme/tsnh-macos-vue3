@@ -3,7 +3,7 @@ import { createPinia } from 'pinia';
 import { macOsKernelPinia, useAppStore } from 'tsnh-macos-kernel';
 import './style.css';
 import App from './App.vue';
-import { loadLocalApps, loadRemoteApps } from './helpers/remotes';
+import { loadLocalApps, loadRemoteApps } from './helpers/loadApps';
 
 // Create app
 const app = createApp(App);

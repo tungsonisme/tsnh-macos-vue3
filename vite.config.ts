@@ -4,6 +4,7 @@ import federation from '@originjs/vite-plugin-federation';
 import initializeRemoteRepos from './build/initializeRemoteRepos';
 import defineRemoteComponents from './build/defineRemoteComponents';
 import injectAppInfos from './build/injectAppInfos';
+import injectAssets from './build/injectAssets';
 
 const PORT = 3000;
 
@@ -38,6 +39,18 @@ export default defineConfig(async ({ mode }) => {
         },
       },
     },
+    build: {
+      rollupOptions: {
+        plugins: [
+          {
+            name: 'closeBundle',
+            closeBundle() {
+              injectAssets(mode);
+            },
+          },
+        ],
+      },
+    },
   };
 
   if (mode !== 'preview') {
@@ -60,6 +73,7 @@ export default defineConfig(async ({ mode }) => {
   }
 
   injectAppInfos();
+  injectAssets(mode);
 
   return viteConfig;
 });

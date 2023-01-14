@@ -16,7 +16,6 @@ export const getAppIconMenuBarItemConfig = (): ExtendedMenuBarItemConfig => {
         {
           title: 'About this Mac',
           onClick: () => {
-            // TODO: About this Mac
             open(EnumLocalApp.ABOUT_THIS_MAC);
           },
         },
@@ -25,7 +24,6 @@ export const getAppIconMenuBarItemConfig = (): ExtendedMenuBarItemConfig => {
         {
           title: 'System Preference',
           onClick: () => {
-            // TODO: About this Mac
             open(EnumLocalApp.SYSTEM_PREFERENCE);
           },
         },
@@ -38,7 +36,7 @@ export const getAppIconMenuBarItemConfig = (): ExtendedMenuBarItemConfig => {
           },
         },
         {
-          title: 'Restart',
+          title: 'Restart...',
           onClick: () => {
             document.location.reload();
           },

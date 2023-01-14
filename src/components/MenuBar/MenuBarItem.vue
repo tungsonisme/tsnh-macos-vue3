@@ -92,7 +92,7 @@ function handleDropdownClick(item: MenuBarDropdownItem) {
   font-weight: 500;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
   line-height: $menu-height;
-  color: rgba(255, 255, 255, 0.9);
+  color: $white;
 
   &.app-name {
     font-weight: bold;
@@ -135,7 +135,7 @@ function handleDropdownClick(item: MenuBarDropdownItem) {
 
 .dropdown-item {
   border-radius: 4px;
-  padding: 0 8px;
+  padding: 2px 8px;
   cursor: default;
 
   &:hover {

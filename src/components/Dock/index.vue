@@ -19,11 +19,12 @@ const { apps, launchedApps, open } = useAppStore();
       class="app-icon-wrapper"
     >
       <div class="app-icon" @click="() => open(app.name)">
-        {{ app.name }}
+        <img v-if="app.icon?.length > 0" :src="app.icon" />
+        <div v-else class="fake-icon"></div>
       </div>
 
       <div
-        v-show="!launchedApps.find((item) => item.appName === app.name)"
+        v-show="launchedApps.find((item) => item.appName === app.name)"
         class="app-active"
       ></div>
     </div>
@@ -49,19 +50,31 @@ const { apps, launchedApps, open } = useAppStore();
 
   .app-icon-wrapper {
     position: relative;
+    margin-right: 10px;
 
     .app-icon {
       width: $dock-height;
       height: $dock-height;
       border-radius: 10px;
-      background-color: black;
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
+
+      .fake-icon {
+        background-color: gray;
+        width: 100%;
+        height: 100%;
+        border-radius: 10px;
+      }
     }
 
     .app-active {
-      width: 4px;
+      width: 3px;
       height: 4px;
       position: absolute;
-      bottom: 0;
+      bottom: -4px;
       left: 50%;
       transform: translate(-50%, 0);
       background-color: black;
