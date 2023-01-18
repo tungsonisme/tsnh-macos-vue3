@@ -8,6 +8,7 @@ import {
 } from './build/defineRemoteComponents';
 import injectAppInfos from './build/injectAppInfos';
 import injectAssets from './build/injectAssets';
+import injectStyles from './build/injectStyles';
 
 const PORT = 3000;
 
@@ -34,11 +35,7 @@ export default defineConfig(async ({ mode }) => {
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: `
-            @import 'src/styles/color.scss';
-            @import 'src/styles/layout.scss';
-            @import 'src/styles/zIndex.scss';
-          `,
+          additionalData: await injectStyles(),
         },
       },
     },
