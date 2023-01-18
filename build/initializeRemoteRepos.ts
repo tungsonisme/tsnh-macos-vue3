@@ -1,8 +1,9 @@
 import * as fs from 'fs';
 import shell from 'shelljs';
 
-const REMOTES_DIR = './.remotes';
-const PUBLIC_REMOTES_DIR = 'public/.remotes';
+const REMOTES = 'remotes';
+const REMOTES_DIR = `./${REMOTES}`;
+const PUBLIC_REMOTES_DIR = `public/${REMOTES}`;
 const BUILD_DIR = 'dist';
 const REMOTES_CONFIG_FILE = '../.remotesrc.json';
 const REMOTES_DEV_CONFIG_FILE = '../.remotesdevrc.json';
@@ -73,7 +74,7 @@ const initializeRemoteRepos = async ({
     } else if (mode === 'production') {
       remotePrefix = productionHost;
     }
-    remotes[name] = `${remotePrefix}/.remotes/${name}/remoteEntry.js`;
+    remotes[name] = `${remotePrefix}/${REMOTES}/${name}/remoteEntry.js`;
 
     let needToInstallAndBuild = true;
     if (fs.existsSync(appFolderName)) {
@@ -113,6 +114,7 @@ const initializeRemoteRepos = async ({
       if (needToInstallAndBuild) {
         // install dependencies
         shell.exec('pnpm install', { silent: true });
+        shell.exec('pnpm install -D', { silent: true });
 
         // build project
         shell.exec('pnpm run build', { silent: true });

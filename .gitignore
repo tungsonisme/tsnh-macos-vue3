@@ -11,6 +11,7 @@ node_modules
 dist
 dist-ssr
 *.local
+.eslintcache
 
 # Editor directories and files
 .vscode/*
@@ -24,7 +25,7 @@ dist-ssr
 *.sw?
 
 # remotes
-.remotes
-public/.remotes
+remotes
+public/remotes
 .remotesdevrc.json
 asset-manifest.json
