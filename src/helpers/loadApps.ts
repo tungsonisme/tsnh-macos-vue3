@@ -1,6 +1,6 @@
 import { useAppStore } from 'tsnh-macos-kernel';
-import localApps from '../configs/localApps';
 import { App as VueApp, defineAsyncComponent } from 'vue';
+import localApps from '../configs/localApps';
 
 export const loadLocalApps = (vueApp: VueApp) => {
   const { installApps } = useAppStore();
@@ -9,15 +9,20 @@ export const loadLocalApps = (vueApp: VueApp) => {
 
   localApps.forEach((app) => {
     vueApp.component(
-      app.mainComponent,
+      app.component,
       defineAsyncComponent(
-        () => import(`../localApps/${app.mainComponent}/index.vue`)
+        () => import(`../localApps/${app.component}/index.vue`)
       )
     );
   });
 };
 
 // DO NOT REMOVE
-export const loadRemoteApps = () => {
-  console.log('Load Remote Apps Annotation');
+export const loadRemoteVueApps = () => {
+  console.log('Load Remote Vue Apps Annotation');
+};
+
+// DO NOT REMOVE
+export const loadRemoteReactApps = async () => {
+  console.log('Load Remote React Apps Annotation');
 };

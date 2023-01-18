@@ -8,10 +8,11 @@ export enum EnumLocalApp {
 
 const localApps: App[] = [
   {
+    type: 'vue',
     name: EnumLocalApp.ABOUT_THIS_MAC,
     title: 'About This Mac',
     icon: '',
-    mainComponent: 'AboutThisMac',
+    component: 'AboutThisMac',
     hiddenInDock: true,
     defaultStyles: {
       isHorizontallyCenter: true,
@@ -21,10 +22,11 @@ const localApps: App[] = [
     },
   },
   {
+    type: 'vue',
     name: EnumLocalApp.SYSTEM_PREFERENCE,
     title: 'System Preferences',
     icon: SystemPreferencesIcon,
-    mainComponent: 'SystemPreferences',
+    component: 'SystemPreferences',
     defaultStyles: {
       isHorizontallyCenter: true,
       top: 200,

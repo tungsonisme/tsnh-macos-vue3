@@ -5,8 +5,17 @@
       "name": "pokemon",
       "title": "Pokemon",
       "icon": "",
-      "mainComponent": "PokemonApp",
-      "git": "https://github.com/tungsonisme/tsnh-pokemon-vue3"
+      "component": "App",
+      "git": "https://github.com/tungsonisme/tsnh-pokemon-vue3",
+      "type": "vue"
+    },
+    {
+      "name": "life-invader",
+      "title": "Life Invader",
+      "icon": "",
+      "component": "App",
+      "git": "https://github.com/tungsonisme/tsnh-lifeinvader-react",
+      "type": "react"
     }
   ]
 }

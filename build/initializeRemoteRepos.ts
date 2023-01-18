@@ -45,7 +45,8 @@ const initializeRemoteRepos = async ({
   shell.cd(REMOTES_DIR);
 
   const remotes: Record<string, string> = {};
-  const viteRegisteredApps: { app: string; component: string }[] = [];
+  const viteVueApps: { app: string; component: string }[] = [];
+  const viteReactApps: { app: string; component: string }[] = [];
 
   // read config files
   log(`reading config ${REMOTES_CONFIG_FILE} ...`);
@@ -62,7 +63,7 @@ const initializeRemoteRepos = async ({
   }
 
   // generate remotes config for federation plugin
-  remoteConfigs.forEach(({ name, git }) => {
+  remoteConfigs.forEach(({ name, git, type }) => {
     const appFolderName = git.split('/')[git.split('/').length - 1];
 
     // update remotes from Github
@@ -123,14 +124,24 @@ const initializeRemoteRepos = async ({
       });
     }
 
-    // set viteRegisteredApps
+    // set viteVueApps
     const files = fs.readdirSync('src/exposes');
     files.forEach((fileName) => {
-      const component = fileName.split('.vue')[0];
-      viteRegisteredApps.push({
-        app: name,
-        component,
-      });
+      if (fileName.endsWith('.vue') && type === 'vue') {
+        const component = fileName.split('.vue')[0];
+        viteVueApps.push({
+          app: name,
+          component,
+        });
+      }
+
+      if (fileName.endsWith('.tsx') && type === 'react') {
+        const component = fileName.split('.tsx')[0];
+        viteReactApps.push({
+          app: name,
+          component,
+        });
+      }
     });
 
     // cd out to process next project
@@ -150,7 +161,7 @@ const initializeRemoteRepos = async ({
   // inject apps
   process.env.VITE_MACOS_REMOTE_APPS = JSON.stringify(remoteConfigs);
 
-  return { remotes, viteRegisteredApps };
+  return { remotes, viteVueApps, viteReactApps };
 };
 
 export default initializeRemoteRepos;

@@ -6,6 +6,10 @@ const injectAssets = (mode: string) => {
   const result = { images: [] };
 
   if (mode === 'production') {
+    if (!fs.existsSync('dist/assets')) {
+      return;
+    }
+
     const assets = fs.readdirSync('dist/assets');
 
     assets.forEach((asset) => {
@@ -24,8 +28,6 @@ const injectAssets = (mode: string) => {
         result.images.push(`${folder}/${image}`);
       });
     });
-
-    console.log({ result });
 
     fs.writeFileSync('public/asset-manifest.json', JSON.stringify(result));
   }
