@@ -33,7 +33,10 @@ function handleDropdownClick(item: MenuBarDropdownItem) {
     @click="() => emit('click', props.itemConfig.title)"
     @mouseover="() => emit('mouseover', props.itemConfig.title)"
   >
-    <div v-if="props.itemConfig.icon" class="img-wrapper">
+    <div v-if="props.itemConfig.component" class="component-wrapper">
+      <component :is="props.itemConfig.component"></component>
+    </div>
+    <div v-else-if="props.itemConfig.icon" class="img-wrapper">
       <img :src="props.itemConfig.icon" />
     </div>
     <div
@@ -99,6 +102,12 @@ function handleDropdownClick(item: MenuBarDropdownItem) {
   }
 }
 
+.component-wrapper {
+  height: $menu-height;
+  display: flex;
+  align-items: center;
+}
+
 .dropdown {
   position: absolute;
   min-width: 150px;
@@ -127,9 +136,13 @@ function handleDropdownClick(item: MenuBarDropdownItem) {
     padding-top: 6px;
   }
 
-  &:last-child {
+  &:last-child:not(:first-child) {
     padding: 0;
     padding-top: 6px;
+  }
+
+  &:first-child:last-child {
+    padding: 0;
   }
 }
 

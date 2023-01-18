@@ -3,7 +3,7 @@ import { defineStore } from 'pinia';
 
 const useGlobalStore = defineStore('global', () => {
   const appState = ref<'boot' | 'locked' | 'active' | 'sleep' | 'screenSaver'>(
-    'boot'
+    'active'
   );
 
   function login() {

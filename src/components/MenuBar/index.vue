@@ -1,22 +1,24 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
-import { storeToRefs } from 'pinia';
-import { useAppStore } from 'tsnh-macos-kernel';
+import { computed } from 'vue';
 import MenuBarItem from './MenuBarItem.vue';
 import { ExtendedMenuBarItemConfig } from '../../types/menuBar';
-import { getAppIconMenuBarItemConfig } from './helpers';
+import {
+  getAppIconMenuBarItemConfig,
+  getBatteryMenuBarItemConfig,
+  getTimeMenuBarItemConfig,
+} from './helpers';
+import useActiveTitle from './useActiveTitle';
 
-const activeTitle = ref<string>();
-const menuBarRef = ref<HTMLDivElement>();
+const {
+  activeTitle,
+  menuBarRef,
+  activeAppInfo,
+  handleMenuBarItemClick,
+  handleMenuBarItemMouseOver,
+  handleDropdownClick,
+} = useActiveTitle();
 
-const store = useAppStore();
-const { activeAppInfo } = storeToRefs(store);
-
-watch(activeAppInfo, () => {
-  activeTitle.value = undefined;
-});
-
-const menuBarItemConfigs = computed((): ExtendedMenuBarItemConfig[] => {
+const leftMenuBarItemConfigs = computed((): ExtendedMenuBarItemConfig[] => {
   return [
     getAppIconMenuBarItemConfig(),
     ...(activeAppInfo.value.app && !activeAppInfo.value.app.hiddenInDock
@@ -32,35 +34,10 @@ const menuBarItemConfigs = computed((): ExtendedMenuBarItemConfig[] => {
   ];
 });
 
-function handleMenuBarItemClick(title: string) {
-  activeTitle.value = title;
-}
-
-function handleMenuBarItemMouseOver(title: string) {
-  if (activeTitle.value) {
-    activeTitle.value = title;
-  }
-}
-
-function handleDocumentClick(e: Event) {
-  if (!menuBarRef.value?.contains(e.target as HTMLElement)) {
-    activeTitle.value = undefined;
-  }
-}
-
-function handleDropdownClick() {
-  activeTitle.value = undefined;
-}
-
-onMounted(() => {
-  document.addEventListener('click', handleDocumentClick);
+const rightMenuBarItemConfigs = computed((): ExtendedMenuBarItemConfig[] => {
+  return [getBatteryMenuBarItemConfig(), getTimeMenuBarItemConfig()];
 });
 
-onUnmounted(() => {
-  document.removeEventListener('click', handleDocumentClick);
-});
-
-// TODO: show focus app
 // TODO: show time
 // TODO: show battery
 // TODO: show brightness slider
@@ -69,15 +46,31 @@ onUnmounted(() => {
 
 <template>
   <div ref="menuBarRef" class="menu-bar">
-    <MenuBarItem
-      v-for="itemConfig in menuBarItemConfigs"
-      :key="itemConfig.title"
-      :active-title="activeTitle"
-      :item-config="itemConfig"
-      @click="handleMenuBarItemClick"
-      @mouseover="handleMenuBarItemMouseOver"
-      @dropdown-click="handleDropdownClick"
-    />
+    <div class="menu-bar-left">
+      <div class="menu-bar-items">
+        <MenuBarItem
+          v-for="itemConfig in leftMenuBarItemConfigs"
+          :key="itemConfig.title"
+          :active-title="activeTitle"
+          :item-config="itemConfig"
+          @click="handleMenuBarItemClick"
+          @mouseover="handleMenuBarItemMouseOver"
+          @dropdown-click="handleDropdownClick"
+        />
+      </div>
+    </div>
+
+    <div class="menu-bar-right">
+      <MenuBarItem
+        v-for="itemConfig in rightMenuBarItemConfigs"
+        :key="itemConfig.title"
+        :active-title="activeTitle"
+        :item-config="itemConfig"
+        @click="handleMenuBarItemClick"
+        @mouseover="handleMenuBarItemMouseOver"
+        @dropdown-click="handleDropdownClick"
+      />
+    </div>
   </div>
 </template>
 
@@ -89,11 +82,26 @@ onUnmounted(() => {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
+  width: calc(100vw - 24px);
   height: $menu-height;
   padding: 0 12px;
   z-index: $tool-bar-z-index;
   display: flex;
   align-items: center;
+  justify-content: space-between;
+}
+
+.menu-bar-items {
+  display: flex;
+  align-items: center;
+}
+
+.menu-bar-right {
+  display: flex;
+  align-items: center;
+
+  > * {
+    margin-left: 8px;
+  }
 }
 </style>
